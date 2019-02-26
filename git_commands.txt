@@ -1,0 +1,23 @@
+git config --global user.name "Alexey Malyshev"
+git config --global user.email alexey.malyshev@gmail.com
+git config --global core.editor vim
+git config -l
+git branch home
+git checkout home
+git checkout -b home
+git add -a
+git add .
+git commit -m ""
+git pull --rebase origin master
+git commit --amend -m ""
+git cherr-pick 1b81d3b
+git reset --hard 2e75207
+git clean -df
+git reflog
+git revert 1b81d3b
+git branch -d home
+git tag my-tag
+git tag my-tag 80ab5d4
+git tag -f my-tag 80ab5d4
+git tag -d my-tag
+git log --graph --oneline
