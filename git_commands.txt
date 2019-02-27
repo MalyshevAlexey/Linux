@@ -1,0 +1,52 @@
+git config --global user.name "Alexey Malyshev"
+git config --global user.email alexey.malyshev@gmail.com
+git config --global core.editor vim
+git config -l
+git branch home
+git checkout home
+git checkout -b home
+git add -a
+git add .
+git commit -m ""
+git pull origin master
+git pull --rebase origin master
+git commit --amend -m ""
+git cherr-pick 1b81d3b
+git reset --hard 2e75207
+git clean -df
+git reflog
+git revert 1b81d3b
+git branch -d home
+git tag my-tag
+git tag my-tag 80ab5d4
+git tag -f my-tag 80ab5d4
+git tag -d my-tag
+git log --graph --oneline
+
+
+git branch develop
+git push -u origin develop
+git checkout -b myfeature develop
+
+git checkout develop
+git merge --no-ff myfeature
+git branch -d myfeature
+git push origin develop
+
+git checkout -b release-1.2 develop
+git commit -a -m "Bumped version number to 1.2"
+git checkout master
+git merge --no-ff release-1.2
+git tag -a 1.2
+git checkout develop
+git merge --no-ff release-1.2
+git branch -d release-1.2
+
+git checkout -b hotfix-1.2.1 master
+git commit -a -m "Bumped version number to 1.2.1"
+git checkout master
+git merge --no-ff hotfix-1.2.1
+git tag -a 1.2.1
+git checkout develop
+git merge --no-ff hotfix-1.2.1
+git branch -d hotfix-1.2.1
