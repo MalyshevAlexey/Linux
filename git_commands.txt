@@ -2,6 +2,9 @@ git config --global user.name "Alexey Malyshev"
 git config --global user.email alexey.malyshev@gmail.com
 git config --global core.editor vim
 git config -l
+git clone url-or-folder-name .
+git branch -a
+git branch --merge
 git branch home
 git checkout home
 git checkout -b home
@@ -21,13 +24,14 @@ git tag my-tag
 git tag my-tag 80ab5d4
 git tag -f my-tag 80ab5d4
 git tag -d my-tag
-git log --graph --oneline
+git log --graph --oneline --all --decorate
+git push origin -u origin home
+git push origin --delete home
 
 
 git branch develop
-git push -u origin develop
+git push origin develop
 git checkout -b myfeature develop
-
 git checkout develop
 git merge --no-ff myfeature
 git branch -d myfeature
@@ -50,3 +54,9 @@ git tag -a 1.2.1
 git checkout develop
 git merge --no-ff hotfix-1.2.1
 git branch -d hotfix-1.2.1
+
+
+git merge --squash home
+git rebase master
+git merge --ff-only home
+git cherry-pick 3ds5kb
