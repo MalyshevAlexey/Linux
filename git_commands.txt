@@ -1,41 +1,11 @@
-git config --global user.name "Alexey Malyshev"
-git config --global user.email alexey.malyshev@gmail.com
-git config --global core.editor vim
-git config -l
-git clone url-or-folder-name .
-git branch -a
-git branch --merge
-git branch home
-git checkout home
-git checkout -b home
-git add -a
-git add .
-git commit -m ""
-git pull origin master
-git pull --rebase origin master
-git commit --amend -m ""
-git cherr-pick 1b81d3b
-git reset --hard 2e75207
-git clean -df
-git reflog
-git revert 1b81d3b
-git branch -d home
-git tag my-tag
-git tag my-tag 80ab5d4
-git tag -f my-tag 80ab5d4
-git tag -d my-tag
-git log --graph --oneline --all --decorate
-git push origin -u origin home
-git push origin --delete home
-
-
 git branch develop
 git push origin develop
+git checkout -t origin/develop
 git checkout -b myfeature develop
 git checkout develop
 git merge --no-ff myfeature
 git branch -d myfeature
-git push origin develop
+git push --prune origin develop
 
 git checkout -b release-1.2 develop
 git commit -a -m "Bumped version number to 1.2"
@@ -55,6 +25,39 @@ git checkout develop
 git merge --no-ff hotfix-1.2.1
 git branch -d hotfix-1.2.1
 
+git push origin --delete home
+git fetch -p
+git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+git fetch --all
+git pull --all
+
+git config --global user.name "Alexey Malyshev"
+git config --global user.email alexey.malyshev@gmail.com
+git config --global core.editor vim
+git config -l
+git clone url-or-folder-name .
+git branch -a
+git branch --merge
+git branch home
+git checkout home
+git checkout -b home
+git checkout -t origin/home
+git add -a
+git add .
+git commit -m ""
+git pull origin master
+git pull --rebase origin master
+git commit --amend -m ""
+git reset --hard 2e75207
+git clean -df
+git reflog
+git revert 1b81d3b
+git tag my-tag
+git tag my-tag 80ab5d4
+git tag -f my-tag 80ab5d4
+git tag -d my-tag
+git log --graph --oneline --all --decorate
+git push origin -u origin home
 
 git merge --squash home
 git rebase master
