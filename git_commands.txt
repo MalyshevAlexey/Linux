@@ -25,6 +25,7 @@ git checkout develop
 git merge --no-ff hotfix-1.2.1
 git branch -d hotfix-1.2.1
 
+git push origin --delete home
 git fetch -p
 git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
 git fetch --all
@@ -45,23 +46,18 @@ git add -a
 git add .
 git commit -m ""
 git pull origin master
-git pull --prune origin master
 git pull --rebase origin master
 git commit --amend -m ""
-git cherr-pick 1b81d3b
 git reset --hard 2e75207
 git clean -df
 git reflog
 git revert 1b81d3b
-git branch -d home
 git tag my-tag
 git tag my-tag 80ab5d4
 git tag -f my-tag 80ab5d4
 git tag -d my-tag
 git log --graph --oneline --all --decorate
 git push origin -u origin home
-git push origin --delete home
-
 
 git merge --squash home
 git rebase master
