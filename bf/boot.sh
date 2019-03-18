@@ -1,13 +1,13 @@
 #!/bin/bash
 
-BFW::SourceFile() {
+BF::SourceFile() {
     local libPath="$1"
     shift
     [[ ! -f "$libPath" ]] && return 1
     builtin source "$libPath" "$@" || return 1
 }
 
-BFW::SourcePath() {
+BF::SourcePath() {
     local libPath="$1"
     shift
     if [[ -d "$libPath" ]]
@@ -15,29 +15,29 @@ BFW::SourcePath() {
         local file
         for file in "$libPath"/*.sh
         do
-            BFW::SourceFile "$file" "$@" || return 1
+            BF::SourceFile "$file" "$@" || return 1
         done
         return 0
     else
-        BFW::SourceFile "$libPath" "$@" && return 0 || BFW::SourceFile "${libPath}.sh" "$@" && return 0
+        BF::SourceFile "$libPath" "$@" && return 0 || BF::SourceFile "${libPath}.sh" "$@" && return 0
     fi
     return 1
 }
 
-BFW::ImportOne() {
-    for i in "${!BFW_IMPORT_ALGO[@]}"; do ${BFW_IMPORT_ALGO[$i]} "$@" && return 0; done
+BF::ImportOne() {
+    for i in "${!BF_IMPORT_ALGO[@]}"; do ${BF_IMPORT_ALGO[$i]} "$@" && return 0; done
     throw "Unable to load $1"
 }
 
-BFW::Import() {
+BF::Import() {
     local libPath
     for libPath in "$@"
     do
-        BFW::ImportOne "$libPath"
+        BF::ImportOne "$libPath"
     done
 }
 
-BFW::DumpStack() {
+BF::DumpStack() {
     local divider==============================================
     local width=45
     local format=" %-3s %-20s %s\n"
@@ -47,17 +47,17 @@ BFW::DumpStack() {
     echo
 }
 
-BFW::DefaultImport() {
+BF::DefaultImport() {
     [[ $# < 1 ]] && return 1
     local libs=($(printf "%q\n" "${BASH_SOURCE[@]}" | sort -u))
     for path in "${libs[@]}"
     do 
-        BFW::SourcePath $([[ $path =~ ^\..*|^/.* ]] && cd "${path%/*}" || cd . && pwd)/$1 "$@" && return 0
+        BF::SourcePath $([[ $path =~ ^\..*|^/.* ]] && cd "${path%/*}" || cd . && pwd)/$1 "$@" && return 0
     done
     false
 }
 
-BFW::Boot() {
+BF::Boot() {
 :
 }
 
@@ -65,18 +65,18 @@ export PS4='+(${BASH_SOURCE##*/}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 set -o pipefail
 shopt -s expand_aliases
 declare -g ALEXX="alexx"
-declare -ag BFW_IMPORT_ALGO
-declare -ag BFW_IMPORTED_FILES
+declare -ag BF_IMPORT_ALGO
+declare -ag BF_IMPORTED_FILES
 
-BFW_IMPORT_ALGO+=(BFW::DefaultImport)
+BF_IMPORT_ALGO+=(BF::DefaultImport)
 
 namespace() { :; }
 throw() { eval 'cat <<< "Exception: $e ($*)" 1>&2; read -s;'; }
 
-BFW::Boot
+BF::Boot
 
-alias import="BFW::Import"
-alias source="BFW::ImportOne"
+alias import="BF::Import"
+alias source="BF::ImportOne"
 alias .=source
 
-declare -g BFW_BOOTED=true
+declare -g BF_BOOTED=true
