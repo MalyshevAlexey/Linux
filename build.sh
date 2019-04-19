@@ -1,6 +1,34 @@
 #!/bin/bash
 
-source ./bf/boot.sh
-import scripts/another
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $DIR/bf/boot.sh
+import libs/tryCatch
 
-[[ $1 != "" ]] && echo "da" || echo "net"
+try {
+	options=("AAA" "BBB" "CCC" "DDD")
+
+	menu() {
+	    echo "Avaliable options:"
+	    for i in ${!options[@]}; do
+	        printf "%3d%s) %s\n" $((i+1)) "${choices[i]:- }" "${options[i]}"
+	    done
+	    [[ "$msg" ]] && echo "$msg"; :
+	}
+
+	prompt="Check an option (again to uncheck, ENTER when done): "
+	while menu && read -rp "$prompt" num && [[ "$num" ]]; do
+	    [[ "$num" != *[![:digit:]]* ]] &&
+	    (( num > 0 && num <= ${#options[@]} )) ||
+	    { msg="Invalid option: $num"; continue; }
+	    ((num--)); msg="${options[num]} was ${choices[num]:+un}checked"
+	    [[ "${choices[num]}" ]] && choices[num]="" || choices[num]="+"
+	done
+
+	printf "You selected"; msg=" nothing"
+	for i in ${!options[@]}; do
+	    [[ "${choices[i]}" ]] && { printf " %s" "${options[i]}"; msg=""; }
+	done
+	echo "$msg"
+}
+catch
+	Exception::Analize knownErrors
