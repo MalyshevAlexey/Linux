@@ -1,0 +1,11 @@
+window	develop	1	1	4	:*Z	37b7,271x71,0,0{224x71,0,0[224x50,0,0,0,224x20,0,51{147x20,0,51,2,76x20,148,51,6}],46x71,225,0,1}
+window	develop	2	0	1	:	b6e0,271x71,0,0,3
+window	develop	3	0	1	:	b6e1,271x71,0,0,4
+window	develop	4	0	1	:-	b6e2,271x71,0,0,5
+pane	develop	1	:vim	1	:*Z	1	:/home/amalysev	1	vim	2490	0
+pane	develop	1	:vim	1	:*Z	2	:/home/amalysev	0	ssh	2611	14
+pane	develop	1	:vim	1	:*Z	3	:/home/amalysev	0	bash	3048	0
+pane	develop	1	:vim	1	:*Z	4	:/home/amalysev	0	bash	2583	0
+pane	develop	2	:bash	0	:	1	:/home/amalysev	1	bash	2657	0
+pane	develop	3	:bash	0	:	1	:/home/amalysev	1	bash	2918	0
+pane	develop	4	:bash	0	:-	1	:/home/amalysev	1	bash	2946	0
