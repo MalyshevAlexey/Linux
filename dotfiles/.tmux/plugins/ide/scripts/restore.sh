@@ -7,7 +7,7 @@ session_exists() {
 
 create_new_session() {
 	local session_name="$1"
-	tmux new-session -d -s "$session_name"
+	TMUX="" tmux new-session -d -s "$session_name"
 }
 
 create_new_window() {
@@ -15,7 +15,7 @@ create_new_window() {
 	local window_number="$2"
 	local window_name="$3"
 	local dir="$4"
-	tmux new-window -d -t "${session_name}:${window_number}" -n "$window_name" -c "$dir"
+	TMUX="" tmux new-window -d -t "${session_name}:${window_number}" -n "$window_name" -c "$dir"
 }
 
 create_new_pane() {
@@ -30,40 +30,44 @@ create_new_pane() {
 }
 
 restore_windows() {
-	grep '^window' "$HOME/.tmux/sessions.bak" | 
-	while IFS=$d read line_type session_name window_number window_active window_flags window_layout
-	do
-		tmux select-layout -t "${session_name}:${window_number}" "$window_layout"
-	done
-}
-
-restore_panes() {
 	local session=
-	local window=
-	local pane=0
-	grep '^pane' "$HOME/.tmux/sessions.bak" | 
-	while IFS=$d read line_type session_name window_number window_name window_active window_flags pane_index dir pane_active pane_command pane_full_command
+	grep '^window' "$HOME/.tmux/sessions.bak" | 
+	while IFS=$d read line_type session_name window_index window_name window_active window_panes window_flags window_layout
 	do
 		if [ "$sessoin" != "$session_name" ]; then
 			session_exists "$session_name" || create_new_session "$session_name"
 			sessoin=$session_name
-			window=
 		fi
-		if [ "$window" != "window_number" ] ; then
-			create_new_window "$session_name" "$window_number" "$window_name" "$dir"
-			window=$window_number
-			pane=0
-		fi
-		if [[ $pane > 0 ]]; then
-			create_new_pane "$session_name" "$window_number" "$window_name" "$dir" "$pane_index"
-			(($pane+=1))
-		fi
+		TMUX="" tmux new-window -d -t "${session_name}:${window_index}" -n "$window_name"
+		for (( c=1; c<window_panes; c++ ))
+		do  
+			 tmux split-window -t "${session_name}:${window_index}"
+		done
+		tmux select-layout -t "${session_name}:${window_index}" "$window_layout" >/dev/null 2>&1
+	done
+}
+
+restore_panes() {
+	grep '^pane' "$HOME/.tmux/sessions.bak" | 
+	while IFS=$d read line_type session_name window_index pane_index pane_current_path pane_active pane_current_command
+	do
+		tmux respawn-pane -k -t "${session_name}:${window_index}.${pane_index}"
+	done
+}
+
+restore_state() {
+	grep '^state' "$HOME/.tmux/sessions.bak" | 
+	while IFS=$d read line_type client_session client_last_session
+	do
+		tmux switch-client -t "$client_last_session"
+		tmux switch-client -t "$client_session"
 	done
 }
 
 restore_all() {
+	restore_windows
 	restore_panes
-	#restore_windows
+	restore_state
 }
 
 restore_all_bak() {
