@@ -3,13 +3,13 @@ Plug 'scrooloose/nerdtree'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/syntastic'
 Plug 'benmills/vimux'
-Plug 'tpope/vim-obsession'
+"Plug 'tpope/vim-obsession'
 "Plug 'valloric/youcompleteme'
 call plug#end()
 
 set nocompatible
 syntax enable
-filetype plugin on
+filetype plugin off
 
 set path+=**
 set wildmenu
@@ -37,14 +37,15 @@ nnoremap <C-f> :NERDTreeToggle<CR>
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 let NERDTreeQuitOnOpen = 1
+let NERDTreeShowHidden=1
 
 function! TmuxMove(direction)
-        let wnr = winnr()
-        silent! execute 'wincmd ' . a:direction
-        " If the winnr is still the same after we moved, it is the last pane
-        if wnr == winnr()
-                call system('tmux select-pane -' . tr(a:direction, 'phjkl', 'lLDUR'))
-        end
+    let wnr = winnr()
+    silent! execute 'wincmd ' . a:direction
+    " If the winnr is still the same after we moved, it is the last pane
+    if wnr == winnr()
+	    call system('tmux select-pane -' . tr(a:direction, 'phjkl', 'lLDUR'))
+    end
 endfunction
 
 nnoremap <silent> <c-h> :call TmuxMove('h')<cr>
